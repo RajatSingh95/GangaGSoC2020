@@ -12,7 +12,8 @@ setup(
     install_requires=[
           'pytest',
           'ganga',
-          'PyPDF2'
+          'PyPDF2',
+          'mysql-connector'
       ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
