@@ -20,6 +20,7 @@ cd src/gangagsoc
 ## Project Sructure
 Now, you are in the project root directory. So in order to run respective task, follow these steps:
 
+
 For running the Ganga Initial Task, change the diectory to gangagsoc/Initial_Task
 ```bash
 cd gangagsoc/Initial_Task
@@ -52,6 +53,13 @@ ganga -i subtask_2.py
 to execute second subtask
 
 
+To run testcases for this task, change the directory to project root directory and run the command as follow:
+
+```bash
+cd ../..
+python -m unittest discover test "*.py"
+```
+
 ## Ganga persistent storage task
 
 Once you entered Persistent_Storage_Task directory, setup the database server first. In order to do so, run
@@ -82,6 +90,8 @@ python subtask_2.py
 to execute second subtask
 
 Explanation:
+
+Below is the approach used to convert/parse Job string blob back to Job object
 
 ![Parsing Flow for a Job Object](job_parsing.png)
 
