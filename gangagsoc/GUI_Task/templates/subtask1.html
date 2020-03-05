@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+	<style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+</style>
+
+
+  <meta charset="utf-8">
+  <title>{% block title %}Population Demo{% endblock %}</title>
+</head>
+<body bgcolor="#E6E6FA">
+
+<center>
+    <button class="button button1" >Countries Population</button>  
+    
+  
+  <div id="container" style="width: 100%;">
+    <!-- <canvas id="population-chart" data-url="{% url 'task:population-chart' %}"></canvas> -->
+    <canvas id="population-chart" ></canvas>
+  </div>
+  <button id='country_id' class="button button2" > Embedded Pie Chart</button>
+  
+  <div id="container" style="width: 75%;">
+    <canvas id="pie-chart" data-url="{% url 'task:population-chart' %}"></canvas>
+  </div>
+</center>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+  		var myPie;
+      var $populationChart = $("#population-chart");
+      var ctx = $populationChart[0].getContext("2d");
+
+      var bar_graph = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: {{ labels|safe }},
+              datasets: [{
+                label: 'Population',
+                backgroundColor: 'blue',
+                data: {{ data|safe }}
+              }]          
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Population Bar Chart'
+              }
+            }
+          });
+     document.getElementById("population-chart").onclick = function(evt)
+	{   
+	    var activePoints = bar_graph.getElementsAtEvent(evt);
+	    if(activePoints.length > 0)
+	    {
+	      var clickedElementindex = activePoints[0]["_index"]; 
+	      var label = bar_graph.data.labels[clickedElementindex];     
+	      var value = bar_graph.data.datasets[0].data[clickedElementindex];
+	      console.log(label, value);
+	      
+	     /////////  pie charts starts
+	      var $pieChart = $("#pie-chart");
+      	  var ctx1 = $pieChart[0].getContext("2d");
+	      $.ajax({
+        	url: $pieChart.data("url")+'?country='+label,
+        	success: function (data) {
+        		var config = {
+			      type: 'pie',
+			      data: {
+			        datasets: [{
+			          data: data.data,
+			          backgroundColor: [
+			            '#EC4420', '#EEF221', '#94F42C', '#2CF4DF', '#F42CEB'
+			          ],
+			          label: 'Population'
+			        }],
+			        labels: data.labels
+			      },
+			      options: {
+			        responsive: true
+			    	}
+			    };
+			if (myPie){
+				myPie.destroy();
+			}
+			myPie = new Chart(ctx1, config); 
+			document.getElementById("country_id").innerHTML="Cities with most population in "+label;   
+          
+        	}
+      		});
+
+	      /////////// pie chart ends
+
+	   }
+	}
+
+      
+
+ 
+
+  </script>
+
+ 
+
+
+  {% block content %}{% endblock %}
+
+</body>
+
+
+
+</html>

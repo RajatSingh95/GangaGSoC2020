@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+.loader {
+  border: 9px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 9px solid #3498db;
+  width: 10px;
+  height: 10px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.button0 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+.button3 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #808000;
+}
+</style>
+
+
+  <meta charset="utf-8">
+  <title>{% block title %}Population Demo{% endblock %}</title>
+</head>
+<body bgcolor="#EEEB8D">
+
+<center>
+    <button class="button button0" onclick="job_submit()" > Submit Job </button>
+    
+  
+  <div id="initial_status" style="width: 100%;">
+    <!-- <canvas id="population-chart" data-url="{% url 'task:population-chart' %}"></canvas> -->
+    
+  </div>
+  <br><br><br><br><br><br>
+
+  <div>
+    <button id="submitted" class="button button1" > Step 1 </button> -------<div id='submit_load' style="display:inline-block;" class="loader"></div>--------
+    <button id="running" class="button button2" > Step 2 </button>
+    ------<div id='run_load' style="display:inline-block;" class="loader"></div>------
+    <button id="completed" class="button button3" > Step 3 </button>
+  </div>
+
+  
+  <div id="job_container" data-url="{% url 'task:job-submit' %}" style="width: 75%;">
+  </div>
+  <div id="job_status" data-url="{% url 'task:status-monitor' %}" style="width: 75%;">
+  </div>
+</center>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  
+<script>
+$("#submit_load").hide();
+$("#run_load").hide();
+
+
+function monitor_status(job_id){
+    var $job_req = $("#job_status");
+    var status_url = $job_req.data("url")+'?j_id='+job_id;
+   // var status = 'submitted';
+   // document.getElementById("job_status").innerHTML= "Job Status: Submitted<br>";
+   
+   $.ajax({
+      url: status_url,
+      success: function (data) {
+      console.log(data.job_status)
+      if (data.job_status!='completed'){
+        if (data.job_status=='running'){
+          $("#submit_load").hide();
+          $("#run_load").show();
+          document.getElementById("running").innerHTML="Running"
+          document.getElementById("running").style.background='#49D927';
+
+        }
+        // document.getElementById("job_status").innerHTML+="<br>Job Status: "+data.job_status+"<br>";
+        // status =  data.job_status;
+        monitor_status(job_id);
+        }
+      else{
+
+        $("#submit_load").hide();
+        $("#run_load").hide();
+        document.getElementById("running").innerHTML="Running"
+        document.getElementById("completed").innerHTML="Completed"
+        document.getElementById("running").style.background='#49D927';
+        document.getElementById("completed").style.background='#49D927';
+        // $.ajax({
+        //     url: status_url,
+        //     success: function (data) {
+        //       document.getElementById("job_container").innerHTML="Output: "+data.job_output
+        //     }
+        //   });
+      }
+      }
+    });
+  
+}
+
+
+function job_submit(){
+  		
+	 document.getElementById("submitted").innerHTML="Step 1";
+   document.getElementById("running").innerHTML="Step 2";
+   document.getElementById("completed").innerHTML="Step 3"
+
+   document.getElementById("submitted").style.background='#F3F6F2';
+   document.getElementById("running").style.background='#F3F6F2';
+   document.getElementById("completed").style.background='#F3F6F2';
+
+	 var $job_req = $("#job_container");
+    
+	 $.ajax({
+      url: $job_req.data("url"),
+      success: function (data) {
+        		 
+      document.getElementById("initial_status").innerHTML="Job Submitted with id: "+data.job_id;
+      $("#submit_load").show();
+      document.getElementById("submitted").innerHTML="Submitted";
+      document.getElementById("submitted").style.background='#49D927';
+      monitor_status(data.job_id);
+
+          
+      }
+    });
+      
+}
+ 
+
+  </script>
+
+ 
+
+
+  {% block content %}{% endblock %}
+
+</body>
+
+
+
+</html>

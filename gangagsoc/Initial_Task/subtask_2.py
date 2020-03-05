@@ -64,4 +64,5 @@ def count_word_from_pdf(pdf_file,exe_file="count_word.sh",merge_file="merge_resu
 
 count_word_from_pdf("CERN.pdf")
 #print(count_job)
+print("Output: ",open("job_output.txt",'r').read())
 exit()

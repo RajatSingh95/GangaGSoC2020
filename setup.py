@@ -13,7 +13,8 @@ setup(
           'pytest',
           'ganga',
           'PyPDF2',
-          'mysql-connector'
+          'mysql-connector',
+          'django'
       ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
