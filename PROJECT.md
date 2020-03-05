@@ -113,9 +113,9 @@ Below is the screenshot of how output looks.
 Once you entered GUI_Task directory, run the following commands to create a django webserver:
 
 ```bash
-python manage.py makemigrations
+python manage.py makemigrations task
 python manage.py migrate
-python manage.py loaddata fixtures cities.json countries.json
+python manage.py loaddata cities.json countries.json
 python manage.py runserver 8000
 ```
 
