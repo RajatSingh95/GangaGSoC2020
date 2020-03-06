@@ -14,6 +14,7 @@ setup(
           'ganga',
           'PyPDF2',
           'mysql-connector',
+          'mysql-connector-python'
           'django'
       ],
     classifiers=[

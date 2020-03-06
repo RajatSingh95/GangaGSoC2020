@@ -36,6 +36,13 @@ For running the Ganga GUI task, change the diectory to gangagsoc/GUI_Task
 cd gangagsoc/GUI_Task
 ```
 
+To run testcases for all the tasks,from project root directory and run the command as follow:
+
+```bash
+python -m unittest discover test "*.py"
+```
+
+
 ## Ganga initial task
 
 Once you entered Initial_Task direcory,
@@ -53,16 +60,14 @@ ganga -i subtask_2.py
 to execute second subtask
 
 
-To run testcases for this task, change the directory to project root directory and run the command as follow:
 
-```bash
-cd ../..
-python -m unittest discover test "*.py"
-```
 
 ## Ganga persistent storage task
 
 Once you entered Persistent_Storage_Task directory, setup the database server first. In order to do so, run
+
+---
+*For normal installation, follow the commands below:*
 
 ```bash
 chmod +x setup_db_server.sh
@@ -71,8 +76,20 @@ chmod +x setup_db_server.sh
 This will install mysql server with database and table for our purpose on pc. You’ll be prompted to create a root password during the installation. Choose a one and make sure you remember it, because you’ll need it later. 
 You can press Y and then ENTER to accept the defaults for all the subsequent questions, with the exception of the one that asks if you’d like to change the root password.
 
-This will also create a database named as `job` with a table `data`
 
+*For docker user, run the commands below for installation:*
+
+```bash
+docker pull mysql:latest
+docker run --name=user_mysql_1 --env="MYSQL_ROOT_PASSWORD=root_password" -p 3306:3306 -d mysql:latest
+docker exec -i user_mysql_1 mysql -uroot -proot_password < schema.sql
+
+```
+
+---
+*Note: all the commands should be run in Persistent_Storage_Task directory*
+
+This will also create a database named as `job` with a table `data`
 After the mysql-server installation, 
 
 run
@@ -104,8 +121,17 @@ to execute third subtask
 This will show performance of thousand iteration i.e (total time taken/no. of iteration) and time taken separately to recreate a Job object.
 This process takes some time like 3-4 minutes for 1000 iterations.
 
-Below is the screenshot of how output looks.
-![Performance evaluation](performance.png)
+Below is the preview of how output looks.
+```bash
+-------Ran  1000 iterations: took  245.27705764770508 seconds-----------
+-------Performance:  0.24527705764770508 seconds-----------
+
+-------Time for reading a Job string blob from db: 0.0010089874267578125  seconds------
+-------Time for creating a Job object: 0.09965062141418457  seconds-------
+
+```
+
+
 
 
 ## Ganga GUI task
@@ -113,9 +139,9 @@ Below is the screenshot of how output looks.
 Once you entered GUI_Task directory, run the following commands to create a django webserver:
 
 ```bash
-python manage.py makemigrations
+python manage.py makemigrations task
 python manage.py migrate
-python manage.py loaddata fixtures cities.json countries.json
+python manage.py loaddata countries.json cities.json 
 python manage.py runserver 8000
 ```
 

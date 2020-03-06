@@ -47,7 +47,6 @@ def count_word_from_pdf(pdf_file,exe_file="count_word.sh",merge_file="merge_resu
 
 	# merges the result of all job-splits
 	job.postprocessors.append(CustomMerger(module=merge_file,files=['job_output.txt'],overwrite=True))
-	job.submit()
 	
 	return job
 

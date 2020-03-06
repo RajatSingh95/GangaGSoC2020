@@ -119,10 +119,9 @@ def node_resolver(attr_value,subattr_mem=['#']):
 			key = [a.strip() for a in sub_elem.split('=')]
 			setattr(obj, key[0], key[1].strip('\''))
 		return obj	
-	
 	att_index = {}
 	for subatr in subattr_mem:
-		index = job_str.find(subatr+' ')
+		index = attr_value.find(subatr+' ')
 		if index>=0:
 			att_index[subatr]=index
 	final_atr = {k: v for k, v in sorted(att_index.items(), key=lambda item: item[1])}
@@ -131,7 +130,7 @@ def node_resolver(attr_value,subattr_mem=['#']):
 		subattr_list.append(key_order)
 	class_name = re.findall(r'[A-z]+ \(',attr_value)[0].replace(' (','')
 	obj = getattr(sys.modules[__name__], class_name)()
-	#print(subattr_list)
+
 	for k in range(0,len(subattr_list)):
 		attr_value = attr_value.strip()
 		if k < len(subattr_list)-1:

@@ -118,5 +118,8 @@ mycursor.execute("SELECT * from data ORDER BY id DESC LIMIT 1")
 last_inserted_job = mycursor.fetchall()
 
 for x in last_inserted_job:
-  print(x[2].decode('utf-8'))
+	try:
+		print(x[2].decode('utf-8'))
+	except:
+		print(x[2])
 print("###### Reading Done #######")

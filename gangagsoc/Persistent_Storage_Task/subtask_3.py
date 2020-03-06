@@ -6,7 +6,7 @@ from ganga import *
 import os
 import time,re,ast
 from gangagsoc.Initial_Task.countWord import check_job_until_completed
-from job_resolver import *
+from gangagsoc.Persistent_Storage_Task.job_resolver import *
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -17,19 +17,27 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 def recreate_job():
+
+	db_read_start = time.time()
 	mycursor.execute("SELECT * from data ORDER BY id DESC LIMIT 1")
 	last_inserted_job = mycursor.fetchall()
 
 	for x in last_inserted_job:
-	  job_str = x[2].decode('utf-8')
-	  subattr_mem = json.loads(x[1].decode('utf-8'))
-	  break
+		try:
+			job_str = x[2].decode('utf-8')
+			subattr_mem = json.loads(x[1].decode('utf-8'))
+		except:
+			job_str = x[2]
+			subattr_mem = json.loads(x[1])
+		break
 	attr_list = subattr_mem['main_attribute_list']
 	job_str = job_str.strip()
 	
+	db_read_finish = time.time()
 	# reading the job from database finish
 
 	# recreating the Job from string starts
+	job_create_start = time.time()
 	j = Job()
 	for i in range(0,len(attr_list)):
 		if i < len(attr_list)-1:
@@ -70,25 +78,24 @@ def recreate_job():
 		except Exception as e:
 			#print("error",str(e))
 			continue
-
+	job_create_finish = time.time()
 	# recreating the Job from string finish
+	return (db_read_finish-db_read_start),(job_create_finish-job_create_start)
 
 
 
-
-## reading from database and recreating job
+## reading from database and recreating job starts
 experiment_start = time.time()
-for test_num in range(0,1000):
+num_iter = 1000
+for test_num in range(0,num_iter):
 	# evaluation starts
-	recreate_job()
+	read_time,create_time=recreate_job()
 experiment_finish = time.time()
 		
-print("-------Ran 1000 iterations: took ",experiment_finish-experiment_start,"seconds-----------")
+print("-------Ran ",num_iter,"iterations: took ",experiment_finish-experiment_start,"seconds-----------")
 print("-------Performance: ",(experiment_finish-experiment_start)/1000,'seconds-----------\n' )
 
 ## experiment for one iteration
-start = time.time()
-recreate_job()
-finish = time.time()
-print("-------Time for reading & recreating a Job object-----------")
-print("-------",finish-start,'seconds-----------')
+read_time,create_time = recreate_job()
+print('-------Time for reading a Job string blob from db:',read_time,' seconds------')
+print('-------Time for creating a Job object:',create_time,' seconds-------')
