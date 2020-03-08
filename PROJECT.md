@@ -20,11 +20,14 @@ cd src/gangagsoc
 ## Project Sructure
 Now, you are in the project root directory. So in order to run respective task, follow these steps:
 
-To run testcases for all the tasks, run the command as follow from the project root directory:
+To run testcases for all the tasks( For Initial and Persistent Storage),from project root directory run the command as follow:
 
 ```bash
 python -m unittest discover test "*.py"
 ```
+
+For GUI task, unit test has to run separately which is mentioned in GUI Task instructions.
+
 
 
 For running the Ganga Initial Task, change the diectory to gangagsoc/Initial_Task
@@ -41,14 +44,6 @@ For running the Ganga GUI task, change the diectory to gangagsoc/GUI_Task
 ```bash
 cd gangagsoc/GUI_Task
 ```
-
-To run testcases for all the tasks( For Initial and Persistent Storage),from project root directory run the command as follow:
-
-```bash
-python -m unittest discover test "*.py"
-```
-
-For GUI task, unit test has to run separately which is mentioned in GUI Task instructions.
 
 
 ## Ganga initial task
