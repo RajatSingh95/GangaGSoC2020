@@ -11,7 +11,10 @@ class TestPersistentStorage(unittest.TestCase):
         # It includes writing the actual job string to db
         # and reading it back and recreating it.
         read_time,create_time,created_job = recreate_job(actual_job)
+        self.assertEqual(len(created_job.subjobs), 0)
+
         created_job.submit()
+        
         self.assertEqual(len(created_job.subjobs), 2)
         self.assertEqual(len(created_job.inputfiles), 2)
 

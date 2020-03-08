@@ -36,11 +36,13 @@ For running the Ganga GUI task, change the diectory to gangagsoc/GUI_Task
 cd gangagsoc/GUI_Task
 ```
 
-To run testcases for all the tasks,from project root directory and run the command as follow:
+To run testcases for all the tasks( For Initial and Persistent Storage),from project root directory run the command as follow:
 
 ```bash
 python -m unittest discover test "*.py"
 ```
+
+For GUI task, unit test has to run separately which is mentioned in GUI Task instructions.
 
 
 ## Ganga initial task
@@ -158,3 +160,10 @@ The web page will show you countries population on a bar graph in descending ord
 visit http://127.0.0.1:8000/task/subtask2 on your web browser.
 
 The web page will show a button with Submit Job button. When you click on it, it will show you Submitted Job id. And at the same time, you can see the job status below on three step button with intuitive loader if the job is in process of transition from one state to another.
+
+
+To run unit test for GUI Task, run
+```bash
+python manage.py test
+```
+
